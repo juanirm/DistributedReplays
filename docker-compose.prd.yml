@@ -22,7 +22,7 @@ services:
       context: ./nginx
     restart: always
     ports:
-      - "${LB_PORT:-8080}:80"
+      - "${LB_PORT:-80}:80"
     depends_on:
       - flask
       - webapp
@@ -55,14 +55,11 @@ services:
   webapp:
     build:
       context: ./webapp
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
     env_file:
       - ".env"
     ports:
       - 3000:3000
-    volumes:
-      - /app/node_modules
-      - ./webapp:/app
 
 volumes:
   calculated.gg.postgres:

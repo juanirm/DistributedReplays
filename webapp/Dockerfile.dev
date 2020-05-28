@@ -2,7 +2,6 @@ FROM node:10-alpine
 
 WORKDIR "/app"
 COPY . .
-RUN sed -i '/localhost/d' ./package.json
 RUN npm install
 
-CMD ["npm","run","start"]
+ENTRYPOINT ["npm","run","docker"]

@@ -17,7 +17,7 @@ from backend.blueprints.spa_api.service_layers.utils import with_session
 from backend.database.objects import Player, Group
 from backend.database.startup import lazy_startup, lazy_get_redis
 from backend.database.wrapper.player_wrapper import create_default_player
-from backend.server_constants import SERVER_PERMISSION_GROUPS, UPLOAD_FOLDER, BASE_FOLDER
+from backend.server_constants import SERVER_PERMISSION_GROUPS, UPLOAD_FOLDER, BASE_FOLDER, REDIS_HOST, REDIS_PORT
 from backend.tasks.celery_tasks import create_celery_config
 from backend.utils.checks import is_local_dev
 from backend.utils.logger import ErrorLogger
@@ -46,8 +46,6 @@ except:
     USERS = None
 
 authorizer = HTTPBasicAuth()
-redis_server = os.getenv("REDIS_HOST", "localhost")
-redis_port = os.getenv('REDIS_PORT', "6379")
 
 class CalculatedServer:
 
@@ -126,7 +124,7 @@ class CalculatedServer:
         app.config['PARSED_DIR'] = os.path.join(BASE_FOLDER, 'data', 'parsed')
         app.config['VERSION'] = CalculatedServer.get_version()
         app.config.update(
-            broker_url=f"redis://{redis_server}:{redis_port}/0",
+            broker_url=f"redis://{REDIS_HOST}:{REDIS_PORT}/0",
             result_backend='redis://',
             worker_max_tasks_per_child=100,
             broker_transport_options={'fanout_prefix': True}

@@ -4,15 +4,12 @@ Safely gets global values from flask in locations where flask values may not exi
 import logging
 
 import redis
-import os
 
 from backend.database.objects import Player
 from backend.utils.logger import ErrorLogger
+from backend.server_constants import REDIS_HOST, REDIS_PORT
 
 logger = logging.getLogger(__name__)
-
-redis_server = os.getenv("REDIS_HOST", "localhost")
-redis_port = os.getenv('REDIS_PORT', "6379")
 
 class FakeRequest(object):
     path = "task_path"
@@ -61,10 +58,7 @@ def get_redis() -> redis.Redis:
     """
     try:
         from flask import current_app
-        ###
-        print("aca crashea")
-        current_app.config['r'] = redis.Redis(host=redis_server, port=redis_port)
-        ###
+        current_app.config['r'] = redis.Redis(host=REDIS_HOST, port=REDIS_PORT)
         return current_app.config['r']
     except Exception as e:
         ErrorLogger.log_error(e)
